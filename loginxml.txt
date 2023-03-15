@@ -1,72 +1,42 @@
-    private EditText phoneNumberEditText;
-    private Button loginButton;
-    
-    private FirebaseAuth mAuth;
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        
-        mAuth = FirebaseAuth.getInstance();
+    <TextView
+        android:id="@+id/textViewObject1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Object 1"
+        android:textSize="24sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"/>
 
-        phoneNumberEditText = findViewById(R.id.phone_number_edit_text);
-        loginButton = findViewById(R.id.login_button);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String phoneNumber = phoneNumberEditText.getText().toString().trim();
-                if (phoneNumber.isEmpty() || phoneNumber.length() < 10) {
-                    phoneNumberEditText.setError("Enter a valid phone number");
-                    phoneNumberEditText.requestFocus();
-                    return;
-                }
+    <Button
+        android:id="@+id/buttonIncrement1"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:text="+"
+        android:layout_alignBaseline="@id/textViewObject1"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"/>
 
-                PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                        phoneNumber,
-                        60,
-                        TimeUnit.SECONDS,
-                        LoginActivity.this,
-                        new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                            @Override
-                            public void onVerificationCompleted(PhoneAuthCredential credential) {
-                                signInWithPhoneAuthCredential(credential);
-                            }
+    <TextView
+        android:id="@+id/textViewCounter1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="24sp"
+        android:layout_alignBaseline="@id/buttonIncrement1"
+        android:layout_toStartOf="@id/buttonIncrement1"
+        android:layout_marginEnd="8dp"/>
 
-                            @Override
-                            public void onVerificationFailed(FirebaseException e) {
-                                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            }
+    <Button
+        android:id="@+id/buttonDecrement1"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:text="-"
+        android:layout_alignBaseline="@id/buttonIncrement1"
+        android:layout_toStartOf="@id/textViewCounter1"
+        android:layout_marginEnd="8dp"/>
 
-                            @Override
-                            public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
-                                String code = getCodeFromUser();
-                                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
-                                signInWithPhoneAuthCredential(credential);
-                            }
-                        });
-            }
-        });
-    }
-
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // User is signed in successfully
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-    }
-
-    private String getCodeFromUser() {
-        // Prompt the user to enter the verification code received via SMS
-        // and return the code entered by the user
-    }
+   </RelativeLayout>
