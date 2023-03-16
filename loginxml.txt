@@ -1,125 +1,28 @@
-public class MainActivity extends AppCompatActivity {
+@Override
+    public void onAccessibilityEvent(AccessibilityEvent event) {
+        if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
+            AccessibilityNodeInfo nodeInfo = event.getSource();
 
-    private int counter1 = 0;
-    private int counter2 = 0;
-    private int counter3 = 0;
-    private int counter4 = 0;
+            if (nodeInfo != null && nodeInfo.getClassName().toString().contains("Button") && nodeInfo.getText() != null) {
+                String buttonText = nodeInfo.getText().toString();
 
-    private TextView textViewCounter1;
-    private TextView textViewCounter2;
-    private TextView textViewCounter3;
-    private TextView textViewCounter4;
+                if (buttonText.equalsIgnoreCase("submit")) {
+                    String message = "Object 1: " + MainActivity.counter1 + "\n" +
+                            "Object 2: " + MainActivity.counter2 + "\n" +
+                            "Object 3: " + MainActivity.counter3 + "\n" +
+                            "Object 4: " + MainActivity.counter4;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+                    String phoneNumber = "+1234567890";
 
-        textViewCounter1 = findViewById(R.id.textViewCounter1);
-        textViewCounter2 = findViewById(R.id.textViewCounter2);
-        textViewCounter3 = findViewById(R.id.textViewCounter3);
-        textViewCounter4 = findViewById(R.id.textViewCounter4);
-
-        Button buttonIncrement1 = findViewById(R.id.buttonIncrement1);
-        buttonIncrement1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                counter1++;
-                textViewCounter1.setText(Integer.toString(counter1));
-            }
-        });
-
-        Button buttonDecrement1 = findViewById(R.id.buttonDecrement1);
-        buttonDecrement1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (counter1 > 0) {
-                    counter1--;
-                    textViewCounter1.setText(Integer.toString(counter1));
-                }
-            }
-        });
-
-        Button buttonIncrement2 = findViewById(R.id.buttonIncrement2);
-        buttonIncrement2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                counter2++;
-                textViewCounter2.setText(Integer.toString(counter2));
-            }
-        });
-
-        Button buttonDecrement2 = findViewById(R.id.buttonDecrement2);
-        buttonDecrement2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (counter2 > 0) {
-                    counter2--;
-                    textViewCounter2.setText(Integer.toString(counter2));
-                }
-            }
-        });
-
-        Button buttonIncrement3 = findViewById(R.id.buttonIncrement3);
-        buttonIncrement3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                counter3++;
-                textViewCounter3.setText(Integer.toString(counter3));
-            }
-        });
-
-        Button buttonDecrement3 = findViewById(R.id.buttonDecrement3);
-        buttonDecrement3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (counter3 > 0) {
-                    counter3--;
-                    textViewCounter3.setText(Integer.toString(counter3));
-                }
-            }
-        });
-
-        Button buttonIncrement4 = findViewById(R.id.buttonIncrement4);
-        buttonIncrement4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                counter4++;
-                textViewCounter4.setText(Integer.toString(counter4));
-            }
-        });
-
-        Button buttonDecrement4 = findViewById(R.id.buttonDecrement4);
-        buttonDecrement4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (counter4 > 0) {
-                    counter4--;
-                    textViewCounter4.setText(Integer.toString(counter4));
-                }
-            }
-        });
-
-        Button buttonSubmit = findViewById(R.id.buttonSubmit);
-        buttonSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String message = "Object 1: " + counter1 + "\n" +
-                                 "Object 2: " + counter2 + "\n" +
-                                 "Object 3: " + counter3 + "\n" +
-                                 "Object 4: " + counter4;
-
-                String phoneNumber = "+1234567890";
-
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_TEXT, message);
-            sendIntent.setType("text/plain");
-            sendIntent.setPackage("com.whatsapp");
-            sendIntent.putExtra("jid", phoneNumber + "@s.whatsapp.net");
-            startActivity(sendIntent);
+                    sendIntent.setType("text/plain");
+                    sendIntent.setPackage("com.whatsapp");
+                    sendIntent.putExtra("jid", phoneNumber + "@s.whatsapp.net");
+                    sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(sendIntent);
+                }
+            }
         }
-    });
-}
-
-
+    }
