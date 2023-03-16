@@ -1,28 +1,8 @@
-@Override
-    public void onAccessibilityEvent(AccessibilityEvent event) {
-        if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
-            AccessibilityNodeInfo nodeInfo = event.getSource();
-
-            if (nodeInfo != null && nodeInfo.getClassName().toString().contains("Button") && nodeInfo.getText() != null) {
-                String buttonText = nodeInfo.getText().toString();
-
-                if (buttonText.equalsIgnoreCase("submit")) {
-                    String message = "Object 1: " + MainActivity.counter1 + "\n" +
-                            "Object 2: " + MainActivity.counter2 + "\n" +
-                            "Object 3: " + MainActivity.counter3 + "\n" +
-                            "Object 4: " + MainActivity.counter4;
-
-                    String phoneNumber = "+1234567890";
-
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, message);
-                    sendIntent.setType("text/plain");
-                    sendIntent.setPackage("com.whatsapp");
-                    sendIntent.putExtra("jid", phoneNumber + "@s.whatsapp.net");
-                    sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(sendIntent);
-                }
-            }
-        }
-    }
+<service android:name=".MyAccessibilityService"
+         android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+    <intent-filter>
+        <action android:name="android.accessibilityservice.AccessibilityService"/>
+    </intent-filter>
+    <meta-data android:name="android.accessibilityservice"
+               android:resource="@xml/accessibility_service_config"/>
+</service>
